@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="common-controls.css">
+</head>
+<body>
+<div th:replace="fragments :: image"></div>
+    <form method="post">
+        <div th:if="${info != null}" th:text="${info}"></div>
+        <input type="text" placeholder="name" th:field="*{user.name}">
+        <input type="text" placeholder="surname" th:field="*{user.surname}">
+        <input type="text" placeholder="login" th:field="*{user.login}">
+        <input type="password" placeholder="password" th:field="*{user.pass}">
+        <input type="password" placeholder="repeated password" th:field="*{user.repeatedPass}">
+        <input type="submit" value="Register">
+    </form>
+
+
+</body>
+</html>

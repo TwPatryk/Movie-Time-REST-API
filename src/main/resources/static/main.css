@@ -1,0 +1,53 @@
+#movie-label {
+    text-align: center;
+}
+
+#movie-content {
+    border: 1px solid black;
+}
+
+.movie-info {
+    padding: 10px;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px;
+
+}
+
+.movie-data {
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    font-size: 24px;
+}
+
+.movie-data p {
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    font-size: 24px;
+}
+
+#rating {
+    margin: auto 30px;
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#filter-form {
+    width: 390px;
+    margin: 15px 60% 15px 40%;
+
+}
+
+#filter-form input[type=text] {
+    text-align: center;
+    font-size: 26px;
+}
+
+#filter-form input[type=submit] {
+    text-align: center;
+    font-size: 26px;
+}

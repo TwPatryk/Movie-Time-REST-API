@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie-time</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="common-controls.css">
+</head>
+<body>
+<div th:replace="fragments :: image"></div>
+<div th:replace="fragments.html :: menu"></div>
+<form method="post" id="register-form">
+    <div th:if="${info != null}" th:text="${info}" id="info"></div>
+    <input type="text" placeholder="Title" class="text-input" th:field="*{film.title}">
+    <input type="text" placeholder="Production year" class="text-input" th:field="*{film.productionYear}">
+    <input type="text" placeholder="Director" class="text-input" th:field="*{film.director}">
+    <input type="text" placeholder="Length" class="text-input" th:field="*{film.length}">
+    <input type="text" placeholder="Genre" class="text-input" th:field="*{film.genre}">
+    <select th:field="${film.category}">
+        <option value="MOVIE">MOVIE</option>
+        <option value="TVSHOW">TV-SHOW</option>
+    </select>
+    <input type="submit" value="Add Film" id="form-submit">
+</form>
+</body>
+</html>

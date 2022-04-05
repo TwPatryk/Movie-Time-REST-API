@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="common-controls.css">
+</head>
+<body>
+    <div th:replace="fragments :: image"></div>
+    <div th:replace="fragments :: menu"></div>
+
+    <form method="post" action="/changeData" class="change-data-form">
+        <input type="text" placeholder="name" th:field="*{user.name}">
+        <input type="text" placeholder="surname" th:field="*{user.surname}">
+        <input type="submit" value="OK" class="form-submit">
+    </form>
+
+    <form method="post" action="/changePass" class="change-data-form">
+        <div th:if="${info != null}" th:text="${info}" id="info"></div>
+        <input type="password" placeholder="password" th:field="*{passModel.currentPass}">
+        <input type="password" placeholder="new password" th:field="*{passModel.newPass}">
+        <input type="password" placeholder="repeated new password" th:field="*{passModel.repeatedNewPass}">
+        <input type="submit" value="OK" class="form-submit">
+    </form>
+
+
+</body>
+</html>

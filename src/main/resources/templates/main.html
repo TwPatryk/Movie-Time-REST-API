@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body >
+<div th:replace="fragments :: image"></div>
+<div th:replace="fragments :: menu"></div>
+<div>
+    <form id="filter-form" method="post" action="/filter" th:field="${filter}">
+        <input type="text" name="filter">
+        <input type="submit"value="Filter">
+    </form>
+</div>
+<div id="movie-label">
+    <th:block th:each="film : ${getAllFilms}" >
+        <div id="movie-content">
+            <div class="movie-info">
+                <p th:text="'title: ' + ${film.title}"></p>
+                <p th:text="'director: ' + ${film.director}"></p>
+            </div>
+            <div class="movie-data">
+                <p th:text="'productionYear: ' + ${film.productionYear}"></p>
+                <p th:text="'length: ' + ${film.length}"></p>
+                <p th:text="'genre: ' + ${film.genre}"></p>
+                <p th:text="'category: ' + ${film.category}"></p>
+
+                <form action="/changeRating" id="rating" method="post" name="rating">
+                    <input type="text" name="grade">
+                    <input type="submit" value="Rate">
+                </form>
+
+                <img src="star.jpg" width="50" height="50" id="star">
+                <p th:text="*{film.rate} + '/10'"></p>
+                <p th:text="*{film.voteCount} + ' : votes'"></p>
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </th:block>
+</div>
+
+</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/common-controls.css">
+</head>
+</html>
