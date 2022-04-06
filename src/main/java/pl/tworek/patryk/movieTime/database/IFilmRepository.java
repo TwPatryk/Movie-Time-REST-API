@@ -1,4 +1,4 @@
-package pl.tworek.patryk.movieTime.repository;
+package pl.tworek.patryk.movieTime.database;
 
 import pl.tworek.patryk.movieTime.model.Film;
 

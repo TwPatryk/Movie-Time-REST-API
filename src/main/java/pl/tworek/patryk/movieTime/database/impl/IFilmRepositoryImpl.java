@@ -1,14 +1,14 @@
-package pl.tworek.patryk.movieTime.repository.impl;
+package pl.tworek.patryk.movieTime.database.impl;
 
 import org.springframework.stereotype.Component;
 import pl.tworek.patryk.movieTime.model.Film;
-import pl.tworek.patryk.movieTime.repository.IFilmRepository;
+import pl.tworek.patryk.movieTime.database.IFilmRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class IFilmRepositoryImpl implements IFilmRepository {
+
+public class IFilmRepositoryImpl {
 
     private final List<Film> movies = new ArrayList<>();
     private final List<Film> tvShows = new ArrayList<>();
@@ -38,7 +38,6 @@ public class IFilmRepositoryImpl implements IFilmRepository {
 
     }
 
-    @Override
     public List<Film> getAllMovies() {
         List<Film> movieList = new ArrayList<>();
         for (Film currentFilm : this.films) {
@@ -49,7 +48,7 @@ public class IFilmRepositoryImpl implements IFilmRepository {
         return movieList;
     }
 
-    @Override
+
     public List<Film> getAllTvShows() {
         List<Film> tvShowList = new ArrayList<>();
         for (Film currentTvShow : this.films) {
@@ -60,20 +59,19 @@ public class IFilmRepositoryImpl implements IFilmRepository {
         return tvShowList;
     }
 
-    @Override
+
     public List<Film> getAllFilms() {
         return this.films;
     }
 
 
-    @Override
+
     public Film rateAfilm(int grade) {
         List<Film> filmList = new ArrayList<>();
         double wynik = 0;
         for (Film filmFromDB : this.films) {
             filmFromDB.setRateSum(filmFromDB.getRateSum() +grade);
             filmFromDB.setVoteCount(filmFromDB.getVoteCount()+1);
-            //filmFromDB.setRate((grade += filmFromDB.getRate())/ filmFromDB.getVoteCount());
             double number = (filmFromDB.getRateSum() / filmFromDB.getVoteCount());
             double roundedNum = round(number, 1);
             filmFromDB.setRate(roundedNum);
@@ -82,23 +80,24 @@ public class IFilmRepositoryImpl implements IFilmRepository {
         return null;
     }
 
-    @Override
+
     public double getRate(int grade) {
         List<Film> filmList = new ArrayList<>();
         for(Film filmFromDB : this.films) {
+            System.out.println(filmFromDB);
             double ocena = filmFromDB.getRate();
             return ocena;
         }
         return 0;
     }
 
-    @Override
+
     public void addFilm(Film film) {
         this.films.add(new Film(film.getTitle(), film.getProductionYear(), film.getDirector(),
                 film.getLength(),film.getGenre(), film.getRate(),film.getRateSum(), film.getVoteCount(),film.getCategory()));
     }
 
-    @Override
+
     public void updateFilm(Film film) {
         for (Film filmFromDB : films) {
             if (filmFromDB.getTitle().equals(film.getTitle())) {

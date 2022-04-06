@@ -1,11 +1,9 @@
 package pl.tworek.patryk.movieTime.sessionObject;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import pl.tworek.patryk.movieTime.model.User;
-import pl.tworek.patryk.movieTime.repository.impl.IUserRepositoryList;
 
 @SessionScope
 @Component

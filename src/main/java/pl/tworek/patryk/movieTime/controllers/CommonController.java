@@ -7,16 +7,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.annotation.SessionScope;
 import pl.tworek.patryk.movieTime.model.Film;
-import pl.tworek.patryk.movieTime.repository.IFilmRepository;
-import pl.tworek.patryk.movieTime.repository.impl.IFilmRepositoryImpl;
-import pl.tworek.patryk.movieTime.repository.impl.IUserRepositoryList;
+import pl.tworek.patryk.movieTime.database.IFilmRepository;
+import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 import pl.tworek.patryk.movieTime.utils.FilterUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Controller
 public class CommonController {
@@ -102,24 +99,20 @@ public class CommonController {
                                Model model,
                                @ModelAttribute Film film) {
 
-        //List<Film> currentFilm = this.filmRepository.filteredFilms(filter);
 
         model.addAttribute("getAllFilms", this.filmRepository.getAllFilms());
-        //int filmidlo = this.filmRepository.rateAfilm(ocena);
-        Film updatedFilm = this.filmRepository.rateAfilm(grade);
-        film.setTitle(updatedFilm.getTitle());
-        film.setProductionYear(updatedFilm.getProductionYear());
-        film.setDirector(updatedFilm.getDirector());
-        film.setLength(updatedFilm.getLength());
-        film.setGenre(updatedFilm.getGenre());
-        film.setRate(updatedFilm.getRate());
-        film.setRateSum(updatedFilm.getRateSum());
-        film.setVoteCount(updatedFilm.getVoteCount());
-        film.setCategory(updatedFilm.getCategory());
 
-        this.filmRepository.updateFilm(film);
+        double ocena = (double) grade;
+        film.setRate(ocena);
 
-        //System.out.println(wynik);
+
+        Film updatedFilm = new Film();
+        updatedFilm.setTitle(film.getTitle());
+
+        System.out.println(updatedFilm.getTitle());
+
+        this.filmRepository.rateAfilm(grade);
+
         return "redirect:/main";
     }
 }

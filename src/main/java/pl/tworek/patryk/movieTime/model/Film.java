@@ -6,8 +6,8 @@ public class Film {
     private String director;
     private String length;
     private String genre;
-    private double rate = 0;
-    private double rateSum = 0;
+    private double rate = 0.0;
+    private double rateSum = 0.0;
     private int voteCount = 0;
     private Category category;
 

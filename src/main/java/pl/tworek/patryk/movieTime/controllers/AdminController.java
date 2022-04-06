@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.tworek.patryk.movieTime.model.Film;
-import pl.tworek.patryk.movieTime.repository.IFilmRepository;
-import pl.tworek.patryk.movieTime.repository.impl.IFilmRepositoryImpl;
+import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
 import javax.annotation.Resource;

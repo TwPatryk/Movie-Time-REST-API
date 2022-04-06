@@ -6,13 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import pl.tworek.patryk.movieTime.model.User;
 import pl.tworek.patryk.movieTime.model.view.ChangePassData;
 import pl.tworek.patryk.movieTime.model.view.CreateNewUser;
-import pl.tworek.patryk.movieTime.repository.IFilmRepository;
-import pl.tworek.patryk.movieTime.repository.impl.IFilmRepositoryImpl;
-import pl.tworek.patryk.movieTime.repository.impl.IUserRepositoryList;
+import pl.tworek.patryk.movieTime.database.IFilmRepository;
+import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
 import javax.annotation.Resource;

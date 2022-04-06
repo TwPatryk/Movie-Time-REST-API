@@ -1,10 +1,8 @@
-package pl.tworek.patryk.movieTime.repository.impl;
+package pl.tworek.patryk.movieTime.database.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.tworek.patryk.movieTime.model.User;
-import pl.tworek.patryk.movieTime.model.view.ChangePassData;
-import pl.tworek.patryk.movieTime.repository.IUserRepository;
+import pl.tworek.patryk.movieTime.database.IUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
