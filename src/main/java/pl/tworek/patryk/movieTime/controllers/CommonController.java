@@ -90,30 +90,33 @@ public class CommonController {
 //            return "redirect:/login";
 //        }
 //    }
-    @RequestMapping(value ="/changeRating", method = RequestMethod.GET)
-    public String changeRatingForm(@PathVariable int grade, Model model) {
 
-        System.out.println(grade);
-        //Film film = this.filmRepository.getFilmById(id);
-        //System.out.println(film.getTitle());
-        //model.addAttribute("film", film);
-        model.addAttribute("user", this.sessionObject.getUser());
-        model.addAttribute("info", this.sessionObject.getInfo());
+//    @RequestMapping(value ="/changeRating", method = RequestMethod.GET)
+//    public String changeRatingForm(@PathVariable int grade, Model model) {
+//
+//        System.out.println(grade);
+//        //Film film = this.filmRepository.getFilmById(id);
+//        //System.out.println(film.getTitle());
+//        //model.addAttribute("film", film);
+//        model.addAttribute("user", this.sessionObject.getUser());
+//        model.addAttribute("info", this.sessionObject.getInfo());
+//
+//        return "changeRating";
+//    }
+//
+//
+//    @RequestMapping(value="/changeRating", method = RequestMethod.POST)
+//    public String deleteFilmForm(@PathVariable int grade, Model model) {
+//
+//        System.out.println(grade);
+//        //Film film = this.filmRepository.getFilmById(id);
+//        //System.out.println(film.getTitle());
+//        //model.addAttribute("film", film);
+//        model.addAttribute("user", this.sessionObject.getUser());
+//        model.addAttribute("info", this.sessionObject.getInfo());
+//
+//        return "redirect:/main";
+//    }
 
-        return "changeRating";
-    }
-
-
-    @RequestMapping(value="/changeRating", method = RequestMethod.POST)
-    public String deleteFilmForm(@PathVariable int grade, Model model) {
-
-        System.out.println(grade);
-        //Film film = this.filmRepository.getFilmById(id);
-        //System.out.println(film.getTitle());
-        //model.addAttribute("film", film);
-        model.addAttribute("user", this.sessionObject.getUser());
-        model.addAttribute("info", this.sessionObject.getInfo());
-
-        return "redirect:/main";
-    }
+    
 }
