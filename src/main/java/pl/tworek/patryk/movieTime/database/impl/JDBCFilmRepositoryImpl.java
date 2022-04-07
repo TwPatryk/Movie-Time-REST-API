@@ -73,67 +73,6 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         return filmList;
     }
 
-    @Override
-    public Film rateAfilm(int rate) {
-        List<Film> filmList = new ArrayList<>();
-        double ocena = (double) rate;
-        try{
-            String SQL = "SELECT * FROM tfilm WHERE rate=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-
-            preparedStatement.setDouble(1, ocena);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.next()) {
-                return this.mapResultSetToFilm(resultSet);
-            } else {
-                return null;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        //System.out.println(filmList);
-        double wynik = 0;
-        for (Film filmFromDB : filmList) {
-            filmFromDB.setRateSum(filmFromDB.getRateSum() +rate);
-            filmFromDB.setVoteCount(filmFromDB.getVoteCount()+1);
-            double number = (filmFromDB.getRateSum() / filmFromDB.getVoteCount());
-            double roundedNum = round(number, 1);
-            filmFromDB.setRate(roundedNum);
-            return filmFromDB;
-        }
-        return null;
-    }
-
-    @Override
-    public double getRate(int grade) {
-        List<Film> filmList = new ArrayList<>();
-
-        try {
-            String SQL = "SELECT * FROM tfilm WHERE rate=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setInt(1, grade);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()) {
-                filmList.add(mapResultSetToFilm(resultSet));
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println(filmList);
-//        for(Film filmFromDB : this.films) {
-//            System.out.println(filmFromDB);
-//            double ocena = filmFromDB.getRate();
-//            return ocena;
-//        }
-        return 0;
-    }
 
     @Override
     public void addFilm(Film film) {
@@ -201,41 +140,6 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         }
         return null;
     }
-
-    @Override
-    public Film getFilmByRate(int rate) {
-        try {
-            String SQL = "SELECT * FROM tfilm WHERE rate=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setInt(1, rate);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.next()) {
-                return this.mapResultSetToFilm(resultSet);
-            } else {
-                return null;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-//    public Film rateAfilm(int grade) {
-//        List<Film> filmList = new ArrayList<>();
-//        double wynik = 0;
-//        for (Film filmFromDB : this.films) {
-//            filmFromDB.setRateSum(filmFromDB.getRateSum() +grade);
-//            filmFromDB.setVoteCount(filmFromDB.getVoteCount()+1);
-//            //filmFromDB.setRate((grade += filmFromDB.getRate())/ filmFromDB.getVoteCount());
-//            double number = (filmFromDB.getRateSum() / filmFromDB.getVoteCount());
-//            double roundedNum = round(number, 1);
-//            filmFromDB.setRate(roundedNum);
-//            return filmFromDB;
-//        }
-//        return null;
-//    }
 
 
     @Override

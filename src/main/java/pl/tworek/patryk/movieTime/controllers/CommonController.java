@@ -78,13 +78,15 @@ public class CommonController {
             return "redirect:/login";
         }
     }
+
     @RequestMapping(value ="/rating", method = RequestMethod.POST)
     public String rating(@RequestParam int rate,
                         Model model) {
 
-        filmRepository.getFilmByRate(rate);
+        //filmRepository.getFilmByRate(rate);
 
         return "redirect:/main";
     }
+
 
 }
