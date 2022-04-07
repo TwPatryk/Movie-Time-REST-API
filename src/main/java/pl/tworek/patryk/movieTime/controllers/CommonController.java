@@ -82,7 +82,7 @@ public class CommonController {
     public String rating(@RequestParam int rate,
                         Model model) {
 
-        
+        filmRepository.getFilmByRate(rate);
 
         return "redirect:/main";
     }

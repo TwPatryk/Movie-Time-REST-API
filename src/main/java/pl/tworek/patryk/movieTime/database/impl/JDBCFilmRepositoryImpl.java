@@ -207,7 +207,7 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         try {
             String SQL = "SELECT * FROM tfilm WHERE rate=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setDouble(1, rate);
+            preparedStatement.setInt(1, rate);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
@@ -221,6 +221,21 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         }
         return null;
     }
+
+//    public Film rateAfilm(int grade) {
+//        List<Film> filmList = new ArrayList<>();
+//        double wynik = 0;
+//        for (Film filmFromDB : this.films) {
+//            filmFromDB.setRateSum(filmFromDB.getRateSum() +grade);
+//            filmFromDB.setVoteCount(filmFromDB.getVoteCount()+1);
+//            //filmFromDB.setRate((grade += filmFromDB.getRate())/ filmFromDB.getVoteCount());
+//            double number = (filmFromDB.getRateSum() / filmFromDB.getVoteCount());
+//            double roundedNum = round(number, 1);
+//            filmFromDB.setRate(roundedNum);
+//            return filmFromDB;
+//        }
+//        return null;
+//    }
 
 
     @Override
