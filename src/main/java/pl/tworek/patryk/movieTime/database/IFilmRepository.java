@@ -14,5 +14,6 @@ public interface IFilmRepository {
     void addFilm(Film film);
     void updateFilm(Film film);
     Film getFilmById(int id);
+    Film getFilmByRate(int rate);
     void deleteFilm(int id);
 }

@@ -203,6 +203,28 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
     }
 
     @Override
+    public Film getFilmByRate(int rate) {
+        double ocena = (double) rate;
+        try {
+            String SQL = "SELECT * FROM tfilm WHERE rate=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setDouble(1, ocena);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                return this.mapResultSetToFilm(resultSet);
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
     public void deleteFilm(int id) {
         try {
             String SQL = "DELETE FROM tfilm WHERE id=?";

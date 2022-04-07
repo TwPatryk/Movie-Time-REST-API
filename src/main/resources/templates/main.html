@@ -23,10 +23,12 @@
                 <p th:text="'category: ' + ${film.category}"></p>
 
                 <!--   <form action="/changeRating" id="rating" method="post" name="rating">  -->
-                <form id="rating" method="post" name="rating" action="/changeRating">
-                    <input type="text" name="grade">
+                <form id="rating"name="rating" action="/changeRating" method="post">
+                    <input type="text" name="rate">
                     <input type="submit" value="Rate">
                 </form>
+
+
 
                 <img src="star.jpg" width="50" height="50" id="star">
                 <p th:text="*{film.rate} + '/10'"></p>
@@ -34,6 +36,7 @@
 
                 <a  th:if="${user.role.name() == 'ADMIN'}" th:href="@{/editFilm/{id} (id=${film.id})}" class="edit">Edit</a>
                 <a  th:if="${user.role.name() == 'ADMIN'}" th:href="@{/deleteFilm/{id} (id=${film.id})}" class="edit">Delete</a>
+                <a  th:href="@{/changeRating/{id} (id=${film.id})}" class="edit">ChangeRating</a>
             </div>
             <div>
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie-time</title>
+    <link rel="stylesheet" href="/common-controls.css">
+</head>
+<body>
+<div th:replace="fragments :: image"></div>
+
+    <div th:if="${info != null}" th:text="${info}" id="info"></div>
+    <a th:text="*{film.title}"></a>
+    <a th:text="*{film.productionYear}"></a>
+    <a th:text="*{film.director}"></a>
+    <a th:text="*{film.length}"></a>
+    <a th:text="*{film.genre}"></a>
+    <a th:text="${film.category}"></a>
+
+    
+
+</body>
+</html>
