@@ -9,12 +9,12 @@
     <a href="main">Main page</a>
     <a href="/main?category=movies">Movies</a>
     <a href="/main?category=tvShows">Tv-Shows</a>
-    <a href="logout">Logout</a>
+    <a href="/logout">Logout</a>
     <a href="/addFilm" th:if="${user.role.name() == 'ADMIN'}">Add film</a>
-    <a href="edit" th:text="${user.login}">Logout</a>
+    <a href="/edit" th:text="${user.login}">Logout</a>
 </div>
 <div th:fragment="image">
-    <img src = "img.jpg" width="400" height="400" id="image">
+    <img src = "/img.jpg" width="400" height="400" id="image">
 </div>
 </body>
 </html>

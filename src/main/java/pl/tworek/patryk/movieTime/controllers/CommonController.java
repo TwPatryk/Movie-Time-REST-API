@@ -3,10 +3,7 @@ package pl.tworek.patryk.movieTime.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.tworek.patryk.movieTime.model.Film;
 import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
@@ -93,25 +90,29 @@ public class CommonController {
 //            return "redirect:/login";
 //        }
 //    }
+    @RequestMapping(value ="/changeRating", method = RequestMethod.GET)
+    public String changeRatingForm(@PathVariable int grade, Model model) {
 
-    @RequestMapping(value ="/changeRating", method = RequestMethod.POST)
-    public String changeRating(@RequestParam int grade,
-                               Model model,
-                               @ModelAttribute Film film) {
+        System.out.println(grade);
+        //Film film = this.filmRepository.getFilmById(id);
+        //System.out.println(film.getTitle());
+        //model.addAttribute("film", film);
+        model.addAttribute("user", this.sessionObject.getUser());
+        model.addAttribute("info", this.sessionObject.getInfo());
+
+        return "changeRating";
+    }
 
 
-        model.addAttribute("getAllFilms", this.filmRepository.getAllFilms());
+    @RequestMapping(value="/changeRating", method = RequestMethod.POST)
+    public String deleteFilmForm(@PathVariable int grade, Model model) {
 
-        double ocena = (double) grade;
-        film.setRate(ocena);
-
-
-        Film updatedFilm = new Film();
-        updatedFilm.setTitle(film.getTitle());
-
-        System.out.println(updatedFilm.getTitle());
-
-        this.filmRepository.rateAfilm(grade);
+        System.out.println(grade);
+        //Film film = this.filmRepository.getFilmById(id);
+        //System.out.println(film.getTitle());
+        //model.addAttribute("film", film);
+        model.addAttribute("user", this.sessionObject.getUser());
+        model.addAttribute("info", this.sessionObject.getInfo());
 
         return "redirect:/main";
     }

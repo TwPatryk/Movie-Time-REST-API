@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:replace="fragments :: image"></div>
-<div th:replace="fragments :: menu"></div>
+<div th:replace="fragments.html :: menu"></div>
 <form method="post" id="register-form">
     <div th:if="${info != null}" th:text="${info}" id="info"></div>
     <input type="text" placeholder="Title" class="text-input" th:field="*{film.title}">
@@ -19,7 +19,7 @@
         <option value="MOVIE">MOVIE</option>
         <option value="TVSHOW">TV-SHOW</option>
     </select>
-    <input type="submit" value="Add Film" id="form-submit">
+    <input type="submit" value="Delete Film" id="form-submit">
 </form>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package pl.tworek.patryk.movieTime.model;
 
 public class Film {
+    private int id;
     private String title;
     private String productionYear;
     private String director;
@@ -11,12 +12,11 @@ public class Film {
     private int voteCount = 0;
     private Category category;
 
-
     public Film() {
     }
 
-    public Film(String title, String productionYear,
-                String director, String length, String genre, double rate, double rateSum, int voteCount, Category category) {
+    public Film(int id, String title, String productionYear, String director, String length, String genre, double rate, double rateSum, int voteCount, Category category) {
+        this.id = id;
         this.title = title;
         this.productionYear = productionYear;
         this.director = director;
@@ -26,6 +26,14 @@ public class Film {
         this.rateSum = rateSum;
         this.voteCount = voteCount;
         this.category = category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

@@ -13,4 +13,6 @@ public interface IFilmRepository {
     double getRate(int grade);
     void addFilm(Film film);
     void updateFilm(Film film);
+    Film getFilmById(int id);
+    void deleteFilm(int id);
 }

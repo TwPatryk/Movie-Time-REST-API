@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Movie-time</title>
-    <link rel="stylesheet" href="register.css">
-    <link rel="stylesheet" href="common-controls.css">
+    <link rel="stylesheet" href="/common-controls.css">
 </head>
 <body>
 <div th:replace="fragments :: image"></div>
-<div th:replace="fragments.html :: menu"></div>
+<div th:replace="fragments :: menu"></div>
 <form method="post" id="register-form">
     <div th:if="${info != null}" th:text="${info}" id="info"></div>
     <input type="text" placeholder="Title" class="text-input" th:field="*{film.title}">

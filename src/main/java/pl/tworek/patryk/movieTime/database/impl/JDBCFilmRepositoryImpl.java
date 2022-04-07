@@ -78,13 +78,19 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         List<Film> filmList = new ArrayList<>();
         double ocena = (double) rate;
         try{
-            String SQL = "UPDATE tfilm SET rate=? WHERE title=?";
+            String SQL = "SELECT * FROM tfilm WHERE rate=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
 
             preparedStatement.setDouble(1, ocena);
 
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            preparedStatement.executeUpdate();
+            if(resultSet.next()) {
+                return this.mapResultSetToFilm(resultSet);
+            } else {
+                return null;
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -154,11 +160,64 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
     @Override
     public void updateFilm(Film film) {
         try {
-            String SQL = "UPDATE tfilm "
+            String SQL = "UPDATE tfilm SET title=?, productionYear=?, director=?, length=?, genre=?, rate=?, rateSum=?, voteCount=?, category=? WHERE id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+
+
+            preparedStatement.setString(1, film.getTitle());
+            preparedStatement.setString(2, film.getProductionYear());
+            preparedStatement.setString(3, film.getDirector());
+            preparedStatement.setString(4, film.getLength());
+            preparedStatement.setString(5, film.getGenre());
+            preparedStatement.setDouble(6, film.getRate());
+            preparedStatement.setDouble(7, film.getRateSum());
+            preparedStatement.setInt(8, film.getVoteCount());
+            preparedStatement.setString(9, film.getCategory().toString());
+            preparedStatement.setInt(10, film.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+
+    @Override
+    public Film getFilmById(int id) {
+        try {
+            String SQL = "SELECT * FROM tfilm WHERE id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                return this.mapResultSetToFilm(resultSet);
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteFilm(int id) {
+        try {
+            String SQL = "DELETE FROM tfilm WHERE id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Film mapResultSetToFilm(ResultSet resultSet) throws SQLException {
         Film film = new Film();
+        film.setId(resultSet.getInt("id"));
         film.setCategory(Film.Category.valueOf(resultSet.getString("category")));
         film.setDirector(resultSet.getString("director"));
         film.setGenre(resultSet.getString("genre"));
