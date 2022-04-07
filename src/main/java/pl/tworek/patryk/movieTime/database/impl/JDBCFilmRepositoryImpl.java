@@ -204,11 +204,10 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
 
     @Override
     public Film getFilmByRate(int rate) {
-        double ocena = (double) rate;
         try {
             String SQL = "SELECT * FROM tfilm WHERE rate=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setDouble(1, ocena);
+            preparedStatement.setDouble(1, rate);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
