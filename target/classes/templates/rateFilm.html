@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie-time</title>
+    <link rel="stylesheet" href="/common-controls.css">
+</head>
+<body>
+<div th:replace="fragments :: image"></div>
+<!--  <div th:replace="fragments.html :: menu"></div>   -->
+<form method="post" id="register-form">
+
+    <div th:if="${info != null}" th:text="${info}" id="info"></div>
+
+    <input type="text" placeholder="Title" class="text-input" th:field="*{film.title}" >
+    <input type="text" placeholder="Production year" class="text-input" th:field="*{film.productionYear}">
+    <input type="text" placeholder="Director" class="text-input" th:field="*{film.director}">
+    <input type="text" placeholder="Length" class="text-input" th:field="*{film.length}">
+    <input type="text" placeholder="Genre" class="text-input" th:field="*{film.genre}">
+    
+    <select th:field="${film.category}">
+        <option value="MOVIE">MOVIE</option>
+        <option value="TVSHOW">TV-SHOW</option>
+    </select>
+
+    <select th:field="${film.rate}">
+        <option value="1">1.0</option>
+        <option value="2">2.0</option>
+        <option value="3">3.0</option>
+        <option value="4">4.0</option>
+        <option value="5">5.0</option>
+        <option value="6">60</option>
+        <option value="7">7.0</option>
+        <option value="8">8.0</option>
+        <option value="9">9.0</option>
+        <option value="10">10.0</option>
+    </select>
+
+    <input type="submit" value="Edit Film" id="form-submit">
+</form>
+</body>
+</html>

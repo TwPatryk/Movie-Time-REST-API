@@ -22,12 +22,14 @@
                 <p th:text="'genre: ' + ${film.genre}"></p>
                 <p th:text="'category: ' + ${film.category}"></p>
 
-
-                 <form id="rating" name="rating" action="/rating" method="post">
-                    <input type="text" name="rate">
+                <!--
+                 <form id="rateAmovie" method="post" action="/rateFilm">
+                      <input type="text" th:field="*{film.rate}">
+                     <input type="text"  name="rate">
                     <input type="submit" value="Rate">
                 </form>
-
+                -->
+                <a th:href="@{/rateFilm/{id} (id=${film.id})}" class="edit">Rate</a>
 
                 <img src="star.jpg" width="50" height="50" id="star">
                 <p th:text="*{film.rate} + '/10'"></p>

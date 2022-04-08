@@ -14,4 +14,5 @@ public interface IFilmRepository {
     Film getFilmById(int id);
     void deleteFilm(int id);
 
+    Film getFilmByRate(double rate);
 }

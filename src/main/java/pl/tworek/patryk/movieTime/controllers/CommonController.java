@@ -79,14 +79,51 @@ public class CommonController {
         }
     }
 
-    @RequestMapping(value ="/rating", method = RequestMethod.POST)
-    public String rating(@RequestParam int rate,
-                        Model model) {
+//    @RequestMapping(value ="/main", method = RequestMethod.GET)
+//    public String ratingForm(Model model) {
+//
+//        model.addAttribute("film", new Film());
+//        return "rating";
+//    }
 
-        //filmRepository.getFilmByRate(rate);
 
-        return "redirect:/main";
+//    @RequestMapping(value ="/main", method = RequestMethod.POST)
+//    public String rating(@RequestParam int rate) {
+//
+//        Film film = filmRepository.getFilmByRate(rate);
+//        System.out.println(film.getRate());
+//
+//        return "redirect:/main";
+//    }
+
+//    @RequestMapping(value = "/rating", method = RequestMethod.POST)
+//    public String editBook(@ModelAttribute Film film, @RequestParam int rate) {
+//
+//        double ocena = (double) rate;
+//        film.setRate(ocena);
+//        Film updatedFilm = this.filmRepository.getFilmByRate(film.getRate());
+//        System.out.println(updatedFilm.getRate());
+//        System.out.println(updatedFilm.getTitle());
+//
+//        return "redirect:/main";
+//    }
+
+    @RequestMapping(value="/rateFilm/{id}", method = RequestMethod.GET)
+    public String editBookPage( Model model,@PathVariable int id) {
+
+        Film film  = this.filmRepository.getFilmById(id);
+        model.addAttribute("film", film);
+        model.addAttribute("user", this.sessionObject.getUser());
+        return "rateFilm";
     }
 
 
+    @RequestMapping(value="/rateFilm/{id}", method = RequestMethod.POST)
+    public String editBook(@ModelAttribute Film film, @PathVariable int id) {
+        film.setId(id);
+
+        this.filmRepository.updateFilm(film);
+
+        return "redirect:/main";
+    }
 }

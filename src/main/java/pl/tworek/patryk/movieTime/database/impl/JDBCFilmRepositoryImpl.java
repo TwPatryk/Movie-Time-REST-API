@@ -155,6 +155,24 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         }
     }
 
+    @Override
+    public Film getFilmByRate(double rate) {
+        try {
+            String SQL = "SELECT * FROM tfilm where rate=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setDouble(1, rate);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                this.mapResultSetToFilm(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private Film mapResultSetToFilm(ResultSet resultSet) throws SQLException {
         Film film = new Film();
         film.setId(resultSet.getInt("id"));
