@@ -8,8 +8,8 @@ public class Film {
     private String length;
     private String genre;
     private double rate;
-    private double rateSum = 0.0;
-    private int voteCount = 0;
+    private double rateSum;
+    private int voteCount;
     private Category category;
 
     public Film() {

@@ -184,12 +184,9 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         film.setTitle(resultSet.getString("title"));
         film.setVoteCount(resultSet.getInt("voteCount"));
         film.setRate(resultSet.getDouble("rate"));
-        film.setRate(resultSet.getDouble("rateSum"));
+        film.setRateSum(resultSet.getDouble("rateSum"));
 
         return film;
     }
-    private static double round (double value, int precision) {
-        int scale = (int) Math.pow(10, precision);
-        return (double) Math.round(value * scale) / scale;
-    }
+
 }

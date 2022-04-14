@@ -17,19 +17,20 @@
     <input type="text" placeholder="Director" class="text-input" th:field="*{film.director}">
     <input type="text" placeholder="Length" class="text-input" th:field="*{film.length}">
     <input type="text" placeholder="Genre" class="text-input" th:field="*{film.genre}">
-    
+
     <select th:field="${film.category}">
         <option value="MOVIE">MOVIE</option>
         <option value="TVSHOW">TV-SHOW</option>
     </select>
 
-    <select th:field="${film.rate}">
+    <!--  <select th:field="${film.rate}">  -->
+    <select name="grade">
         <option value="1">1.0</option>
         <option value="2">2.0</option>
         <option value="3">3.0</option>
         <option value="4">4.0</option>
         <option value="5">5.0</option>
-        <option value="6">60</option>
+        <option value="6">6.0</option>
         <option value="7">7.0</option>
         <option value="8">8.0</option>
         <option value="9">9.0</option>
