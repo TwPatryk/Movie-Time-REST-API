@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="movie-time z gita aktual" />
         <module name="Movie-Time" />
         <module name="2. Movie-Time" />
         <module name="movie-time z gita" />
@@ -17,6 +18,7 @@
       <module name="2. Movie-Time" options="-parameters" />
       <module name="Movie-Time" options="-parameters" />
       <module name="movie-time z gita" options="-parameters" />
+      <module name="movie-time z gita aktual" options="-parameters" />
     </option>
   </component>
 </project>

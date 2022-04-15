@@ -5,12 +5,14 @@ import org.springframework.stereotype.Component;
 import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.model.Film;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class JDBCFilmRepositoryImpl implements IFilmRepository {
@@ -77,7 +79,7 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
     @Override
     public void addFilm(Film film) {
         try {
-            String SQL = "INSERT INTO tfilm(title, productionYear, director, length, genre, rate, rateSum, voteCount, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO tfilm(title, productionYear, director, length, genre, rate, rateSum, voteCount, category, filePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
             preparedStatement.setString(1, film.getTitle());
             preparedStatement.setString(2, film.getProductionYear());
@@ -88,6 +90,7 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
             preparedStatement.setDouble(7, film.getRateSum());
             preparedStatement.setInt(8, film.getVoteCount());
             preparedStatement.setString(9, film.getCategory().toString());
+            preparedStatement.setString(10, film.getFilePath());
 
             preparedStatement.executeUpdate();
 
@@ -99,7 +102,7 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
     @Override
     public void updateFilm(Film film) {
         try {
-            String SQL = "UPDATE tfilm SET title=?, productionYear=?, director=?, length=?, genre=?, rate=?, rateSum=?, voteCount=?, category=? WHERE id=?";
+            String SQL = "UPDATE tfilm SET title=?, productionYear=?, director=?, length=?, genre=?, rate=?, rateSum=?, voteCount=?, category=?, filePath=? WHERE id=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
 
 
@@ -112,7 +115,8 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
             preparedStatement.setDouble(7, film.getRateSum());
             preparedStatement.setInt(8, film.getVoteCount());
             preparedStatement.setString(9, film.getCategory().toString());
-            preparedStatement.setInt(10, film.getId());
+            preparedStatement.setString(10, film.getFilePath());
+            preparedStatement.setInt(11, film.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -185,8 +189,20 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         film.setVoteCount(resultSet.getInt("voteCount"));
         film.setRate(resultSet.getDouble("rate"));
         film.setRateSum(resultSet.getDouble("rateSum"));
+        film.setFilePath(resultSet.getString("filePath"));
 
         return film;
     }
+    public String filePathGenerator() {
 
+        Random random = new Random();
+        int number = random.nextInt(100);
+        String imgDestFullPath = "C:\\Users\\Riggs\\Downloads\\it camp\\Moje projekty\\Movie time & Bookstore & NBP\\movie-time z gita aktual\\src\\main\\resources\\static\\pliki\\" + number;
+        //String imgDest = "\\pliki\\" + number;
+        File filePath = new File(imgDestFullPath);
+        filePath.mkdir();
+
+        String imgDestination = imgDestFullPath + "\\obrazek.jpg" ;
+        return imgDestination;
+    }
 }

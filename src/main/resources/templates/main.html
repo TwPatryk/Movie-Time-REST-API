@@ -16,6 +16,9 @@
                 <p th:text="'title: ' + ${film.title}"></p>
                 <p th:text="'director: ' + ${film.director}"></p>
             </div>
+            <div>
+                <img th:src="${film.filePath}" width="200" height="300">
+            </div>
             <div class="movie-data">
                 <p th:text="'productionYear: ' + ${film.productionYear}"></p>
                 <p th:text="'length: ' + ${film.length}"></p>

@@ -94,7 +94,7 @@ public class IFilmRepositoryImpl {
 
     public void addFilm(Film film) {
         this.films.add(new Film(film.getId(),film.getTitle(), film.getProductionYear(), film.getDirector(),
-                film.getLength(),film.getGenre(), film.getRate(),film.getRateSum(), film.getVoteCount(),film.getCategory()));
+                film.getLength(),film.getGenre(), film.getRate(),film.getRateSum(), film.getVoteCount(),film.getCategory(), film.getFilePath()));
     }
 
 

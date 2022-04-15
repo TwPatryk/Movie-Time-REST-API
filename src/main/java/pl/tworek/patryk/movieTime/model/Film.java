@@ -11,11 +11,12 @@ public class Film {
     private double rateSum;
     private int voteCount;
     private Category category;
+    private String filePath;
 
     public Film() {
     }
 
-    public Film(int id, String title, String productionYear, String director, String length, String genre, double rate, double rateSum, int voteCount, Category category) {
+    public Film(int id, String title, String productionYear, String director, String length, String genre, double rate, double rateSum, int voteCount, Category category, String filePath) {
         this.id = id;
         this.title = title;
         this.productionYear = productionYear;
@@ -26,6 +27,7 @@ public class Film {
         this.rateSum = rateSum;
         this.voteCount = voteCount;
         this.category = category;
+        this.filePath = filePath;
     }
 
     public int getId() {
@@ -106,6 +108,14 @@ public class Film {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public enum Category {

@@ -8,13 +8,14 @@
 <body>
 <div th:replace="fragments :: image"></div>
 <div th:replace="fragments :: menu"></div>
-<form method="post" id="register-form">
+<form method="post" id="register-form" enctype="multipart/form-data">
     <div th:if="${info != null}" th:text="${info}" id="info"></div>
     <input type="text" placeholder="Title" class="text-input" th:field="*{film.title}">
     <input type="text" placeholder="Production year" class="text-input" th:field="*{film.productionYear}">
     <input type="text" placeholder="Director" class="text-input" th:field="*{film.director}">
     <input type="text" placeholder="Length" class="text-input" th:field="*{film.length}">
     <input type="text" placeholder="Genre" class="text-input" th:field="*{film.genre}">
+    <input type="file" name="obrazek" >
     <select th:field="${film.category}">
         <option value="MOVIE">MOVIE</option>
         <option value="TVSHOW">TV-SHOW</option>
