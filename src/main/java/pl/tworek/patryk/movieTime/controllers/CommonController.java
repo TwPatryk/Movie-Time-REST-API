@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
 import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
+import pl.tworek.patryk.movieTime.services.IFilmService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 import pl.tworek.patryk.movieTime.utils.FilterUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class CommonController {
@@ -20,22 +20,19 @@ public class CommonController {
     @Autowired
     IFilmRepository filmRepository;
 
-    @Autowired
-    IUserRepositoryList userRepositoryList;
-
     @Resource
     SessionObject sessionObject;
 
+    @Autowired
+    IFilmService filmService;
+
+    @Autowired
+    IFilmDAO filmDAO;
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String commonRedirect(Model model) {
-        if (sessionObject.isLogged()) {
-            model.addAttribute("getAllFilms", filmRepository.getAllFilms());
-            model.addAttribute("user", this.sessionObject.getUser());
-            return "main";
-        } else {
-            return "redirect:/login";
-        }
+    public String commonRedirect() {
+        return "redirect:/main";
     }
 
 
@@ -43,27 +40,7 @@ public class CommonController {
     public String runMainPage(Model model, @RequestParam(defaultValue = "none") String category) {
 
         if (sessionObject.isLogged()) {
-            model.addAttribute("getAllFilms", filmRepository.getAllFilms());
-            model.addAttribute("user", this.sessionObject.getUser());
-
-            switch(category) {
-                case "movies":
-                    model.addAttribute("getAllFilms",
-                            FilterUtils.filterOfFilms(this.filmRepository.getAllMovies(),
-                                    this.sessionObject.getFilter()));
-                    break;
-                case"tvShows":
-                    model.addAttribute("getAllFilms",
-                            FilterUtils.filterOfFilms(this.filmRepository.getAllTvShows(),
-                                    this.sessionObject.getFilter()));
-                    break;
-                default:
-                    model.addAttribute("getAllFilms",
-                                FilterUtils.filterOfFilms(this.filmRepository.getAllFilms(),
-                                        this.sessionObject.getFilter()));
-
-                    break;
-            }
+            model.addAttribute("getAllFilms", this.filmService.getFilmsByCategoryWithFilter(category));
             model.addAttribute("user", this.sessionObject.getUser());
             model.addAttribute("filter", this.sessionObject.getFilter());
             return "main";
@@ -82,39 +59,9 @@ public class CommonController {
         }
     }
 
-//    @RequestMapping(value ="/main", method = RequestMethod.GET)
-//    public String ratingForm(Model model) {
-//
-//        model.addAttribute("film", new Film());
-//        return "rating";
-//    }
-
-
-//    @RequestMapping(value ="/main", method = RequestMethod.POST)
-//    public String rating(@RequestParam int rate) {
-//
-//        Film film = filmRepository.getFilmByRate(rate);
-//        System.out.println(film.getRate());
-//
-//        return "redirect:/main";
-//    }
-
-//    @RequestMapping(value = "/rating", method = RequestMethod.POST)
-//    public String editBook(@ModelAttribute Film film, @RequestParam int rate) {
-//
-//        double ocena = (double) rate;
-//        film.setRate(ocena);
-//        Film updatedFilm = this.filmRepository.getFilmByRate(film.getRate());
-//        System.out.println(updatedFilm.getRate());
-//        System.out.println(updatedFilm.getTitle());
-//
-//        return "redirect:/main";
-//    }
-
     @RequestMapping(value="/rateFilm/{id}", method = RequestMethod.GET)
     public String editBookPage( Model model,@PathVariable int id) {
 
-        //Film film = this.filmRepository.getFilmById(id);
 
         model.addAttribute("film", filmRepository.getFilmById(id));
         model.addAttribute("user", this.sessionObject.getUser());

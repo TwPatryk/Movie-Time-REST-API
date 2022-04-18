@@ -13,9 +13,8 @@ public interface IFilmRepository {
     void updateFilm(Film film);
     Film getFilmById(int id);
     void deleteFilm(int id);
-    Film getFilmByRate(double rate);
 
-    String filePathGenerator();
+
 
 
 }

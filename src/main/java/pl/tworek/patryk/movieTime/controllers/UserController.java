@@ -11,6 +11,7 @@ import pl.tworek.patryk.movieTime.model.view.ChangePassData;
 import pl.tworek.patryk.movieTime.model.view.CreateNewUser;
 import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
+import pl.tworek.patryk.movieTime.services.IUserService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
 import javax.annotation.Resource;
@@ -18,11 +19,10 @@ import javax.annotation.Resource;
 @Controller
 public class UserController {
 
-    @Autowired
-    IUserRepositoryList userRepository;
+
 
     @Autowired
-    IFilmRepository filmRepository;
+    IUserService userService;
 
     @Resource
     SessionObject sessionObject;
@@ -43,9 +43,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginForm(@ModelAttribute User user) {
 
-
-        this.sessionObject.setUser(this.userRepository.authenticate(user));
-
+        this.sessionObject.setUser(this.userService.authenticate(user));
 
         if (this.sessionObject.isLogged()) {
             return "redirect:/main";
@@ -80,9 +78,8 @@ public class UserController {
 
         @RequestMapping(value="/changeData", method = RequestMethod.POST)
         public String changeData(@ModelAttribute User user) {
-                user.setLogin(this.sessionObject.getUser().getLogin());
-                User updatedUser = this.userRepository.updateUserData(user);
-                this.sessionObject.setUser(updatedUser);
+
+                this.userService.updateUserData(user);
                 return "redirect:/edit";
         }
 
@@ -93,18 +90,13 @@ public class UserController {
         if(!changePassData.getNewPass().equals(changePassData.getRepeatedNewPass())) {
             this.sessionObject.setInfo("invalid repeated new password");
         }
-        User user = new User();
-        user.setPassword(changePassData.getCurrentPass());
-        user.setLogin(this.sessionObject.getUser().getLogin());
-        User authenticatedUser = this.userRepository.authenticate(user);
 
-        if(authenticatedUser == null) {
-            this.sessionObject.setInfo("invalid password");
+        User result = this.userService.updateUserPass(changePassData);
+        if(result != null) {
+            this.sessionObject.setUser(result);
+        } else {
+            this.sessionObject.setInfo("changing password failed");
         }
-
-        user.setPassword(changePassData.getNewPass());
-        User updatedUser = this.userRepository.updateUserPass(user);
-        this.sessionObject.setUser(updatedUser);
 
         return "redirect:/edit";
     }
@@ -122,29 +114,16 @@ public class UserController {
     @RequestMapping(value="/register", method=RequestMethod.POST)
     public String registerData(@ModelAttribute CreateNewUser createNewUser, Model model) {
 
-        User user = new User(createNewUser.getName(), createNewUser.getSurname(),
-                createNewUser.getLogin(),createNewUser.getPass(), User.Role.USER);
+        boolean result = this.userService.registerUser(createNewUser);
 
-        boolean checkUser = userRepository.checkIfUserExists(user);
-
-        if (checkUser) {
-            this.sessionObject.setInfo("Login already exists");
-            return "redirect:/login";
-        } else {
-            if (user.getPassword().equals(createNewUser.getRepeatedPass())) {
-                userRepository.addUser(user);
-                this.sessionObject.setInfo("Registration successfull");
-            } else {
-                this.sessionObject.setInfo("Invalid repeated password");
-            }
+        if (!result) {
+            this.sessionObject.setInfo("Login already taken!");
+            return "redirect:/register";
         }
 
-
-
-        this.sessionObject.setUser(user);
+        this.sessionObject.setInfo("Registration successfull !");
 
 
         return "redirect:/login";
     }
-
 }

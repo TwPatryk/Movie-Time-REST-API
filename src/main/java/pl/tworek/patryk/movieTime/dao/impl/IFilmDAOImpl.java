@@ -1,102 +1,40 @@
-package pl.tworek.patryk.movieTime.database.impl;
+package pl.tworek.patryk.movieTime.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import pl.tworek.patryk.movieTime.database.IFilmRepository;
+import org.springframework.stereotype.Repository;
+import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
 
-import java.io.File;
+import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-@Component
-public class JDBCFilmRepositoryImpl implements IFilmRepository {
+@Repository
+public class IFilmDAOImpl implements IFilmDAO {
 
     @Autowired
     Connection connection;
 
-
     @Override
-    public List<Film> getAllMovies() {
-        List<Film> filmList = new ArrayList<>();
+    public Film getFilmByTitle(String title) {
         try {
-            String SQL = "SELECT * FROM tfilm WHERE category=?";
+            String SQL = "SELECT * FROM tfilm WHERE title=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, Film.Category.MOVIE.toString());
+            preparedStatement.setString(1, title);
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                filmList.add(this.mapResultSetToFilm(resultSet));
+            if (resultSet.next()) {
+                return this.mapResultSetToFilm(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return filmList;
-    }
-
-    @Override
-    public List<Film> getAllTvShows() {
-        List<Film> filmList = new ArrayList<>();
-        try {
-            String SQL = "SELECT * FROM tfilm WHERE category=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, Film.Category.TVSHOW.toString());
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                filmList.add(this.mapResultSetToFilm(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return filmList;
-    }
-
-    @Override
-    public List<Film> getAllFilms() {
-        List<Film> filmList = new ArrayList<>();
-        try {
-            String SQL = "SELECT * FROM tfilm";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()) {
-                filmList.add(this.mapResultSetToFilm(resultSet));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return filmList;
-    }
-
-
-    @Override
-    public void addFilm(Film film) {
-        try {
-            String SQL = "INSERT INTO tfilm(title, productionYear, director, length, genre, rate, rateSum, voteCount, category, filePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, film.getTitle());
-            preparedStatement.setString(2, film.getProductionYear());
-            preparedStatement.setString(3, film.getDirector());
-            preparedStatement.setString(4, film.getLength());
-            preparedStatement.setString(5, film.getGenre());
-            preparedStatement.setDouble(6, film.getRate());
-            preparedStatement.setDouble(7, film.getRateSum());
-            preparedStatement.setInt(8, film.getVoteCount());
-            preparedStatement.setString(9, film.getCategory().toString());
-            preparedStatement.setString(10, film.getFilePath());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return null;
     }
 
     @Override
@@ -124,6 +62,41 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         }
     }
 
+    @Override
+    public void persistFilm(Film film) {
+        try {
+            String SQL = "INSERT INTO tfilm(title, productionYear, director, length, genre, rate, rateSum, voteCount, category, filePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setString(1, film.getTitle());
+            preparedStatement.setString(2, film.getProductionYear());
+            preparedStatement.setString(3, film.getDirector());
+            preparedStatement.setString(4, film.getLength());
+            preparedStatement.setString(5, film.getGenre());
+            preparedStatement.setDouble(6, film.getRate());
+            preparedStatement.setDouble(7, film.getRateSum());
+            preparedStatement.setInt(8, film.getVoteCount());
+            preparedStatement.setString(9, film.getCategory().toString());
+            preparedStatement.setString(10, film.getFilePath());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteFilm(int id) {
+        try {
+            String SQL = "DELETE FROM tfilm WHERE id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public Film getFilmById(int id) {
@@ -145,18 +118,40 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         return null;
     }
 
-
     @Override
-    public void deleteFilm(int id) {
+    public List<Film> getFilmsByCategory(Film.Category category) {
+        List<Film> filmList = new ArrayList<>();
         try {
-            String SQL = "DELETE FROM tfilm WHERE id=?";
+            String SQL = "SELECT * FROM tfilm WHERE category=?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setString(1, category.toString());
 
-            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                filmList.add(this.mapResultSetToFilm(resultSet));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return filmList;
+    }
+
+    @Override
+    public List<Film> getAllFilms() {
+        List<Film> filmList = new ArrayList<>();
+        try {
+            String SQL = "SELECT * FROM tfilm";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                filmList.add(this.mapResultSetToFilm(resultSet));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filmList;
     }
 
     private Film mapResultSetToFilm(ResultSet resultSet) throws SQLException {
@@ -174,17 +169,5 @@ public class JDBCFilmRepositoryImpl implements IFilmRepository {
         film.setFilePath(resultSet.getString("filePath"));
 
         return film;
-    }
-    public String filePathGenerator() {
-
-        Random random = new Random();
-        int number = random.nextInt(100);
-        String imgDestFullPath = "C:\\Users\\Riggs\\Downloads\\it camp\\Moje projekty\\Movie time & Bookstore & NBP\\movie-time z gita aktual\\src\\main\\resources\\static\\pliki\\" + number;
-        //String imgDest = "\\pliki\\" + number;
-        File filePath = new File(imgDestFullPath);
-        filePath.mkdir();
-
-        String imgDestination = imgDestFullPath + "\\obrazek.jpg" ;
-        return imgDestination;
     }
 }

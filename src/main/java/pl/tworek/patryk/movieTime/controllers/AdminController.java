@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
 import pl.tworek.patryk.movieTime.database.IFilmRepository;
+import pl.tworek.patryk.movieTime.services.IFilmService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
 import javax.annotation.Resource;
@@ -17,18 +19,20 @@ import java.util.Random;
 @Controller
 public class AdminController {
 
-    @Autowired
-    IFilmRepository filmRepository;
-
     @Resource
     SessionObject sessionObject;
+
+    @Autowired
+    IFilmService filmService;
+
+    @Autowired
+    IFilmDAO filmDAO;
 
     @RequestMapping(value="/addFilm", method= RequestMethod.GET)
     public String addFilmForm(Model model) {
         if(!this.sessionObject.isLogged()) {
             return "redirect:/login";
         }
-
         model.addAttribute("film", new Film());
         model.addAttribute("user", this.sessionObject.getUser());
         model.addAttribute("info", this.sessionObject.getInfo());
@@ -40,32 +44,22 @@ public class AdminController {
         if(!this.sessionObject.isLogged()) {
             return "redirect:/login";
         }
-
-
-        if (film.getTitle().equals("") || film.getProductionYear().equals("") || film.getDirector().equals("") ||
-                film.getLength().equals("") || film.getGenre().equals("")) {
-            this.sessionObject.setInfo("Please, fill the whole form");
-            return "redirect:/addFilm";
-        } else {
-
-            try {
-                String filePath = filmRepository.filePathGenerator();
-                obrazek.transferTo(new File(filePath));
-
-
-                String[] stringSplit = filePath.split("static");
-                String f = stringSplit[1];
-                String g = f.replace("\\", "/");
-                film.setFilePath(g);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Film addedFilm = new Film(film.getId(),film.getTitle(),film.getProductionYear(),film.getDirector(),
-                    film.getLength(),film.getGenre(),film.getRate(), film.getRateSum(),film.getVoteCount(),film.getCategory(), film.getFilePath());
-            this.filmRepository.addFilm(addedFilm);
-            System.out.println(addedFilm.getFilePath());
+        try {
+            String filePath = filmService.filePathGenerator();
+            obrazek.transferTo(new File(filePath));
+            film.setFilePath(filmService.viewPathModifier(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        IFilmService.AddFilmResult result = this.filmService.addFilm(film);
+        if (result == IFilmService.AddFilmResult.FILM_ADDED) {
             this.sessionObject.setInfo("Film added successfully!");
+        } else if (result == IFilmService.AddFilmResult.FILM_UPDATED) {
+            this.sessionObject.setInfo("Film already exists - update successfull!");
+//        if (film.getTitle().equals("") || film.getProductionYear().equals("") || film.getDirector().equals("") ||
+//                film.getLength().equals("") || film.getGenre().equals("")) {
+//            this.sessionObject.setInfo("Please, fill the whole form");
+//            return "redirect:/addFilm";
         }
         return "redirect:/main";
     }
@@ -73,7 +67,7 @@ public class AdminController {
     @RequestMapping(value="/editFilm/{id}", method = RequestMethod.GET)
     public String editBookPage( Model model,@PathVariable int id) {
 
-        Film film = this.filmRepository.getFilmById(id);
+        Film film = this.filmService.getFilmById(id);
         model.addAttribute("film", film);
         model.addAttribute("user", this.sessionObject.getUser());
         model.addAttribute("info", this.sessionObject.getInfo());
@@ -84,7 +78,7 @@ public class AdminController {
     @RequestMapping(value="/editFilm/{id}", method = RequestMethod.POST)
     public String editBook(@ModelAttribute Film film, @PathVariable int id) {
         film.setId(id);
-        this.filmRepository.updateFilm(film);
+        this.filmDAO.updateFilm(film);
 
         return "redirect:/main";
     }
@@ -92,13 +86,12 @@ public class AdminController {
     @RequestMapping(value="/deleteFilm/{id}", method = RequestMethod.GET)
     public String deleteFilmForm(@PathVariable int id, Model model) {
 
-        Film film = this.filmRepository.getFilmById(id);
-        System.out.println(film.getTitle());
+        Film film = this.filmDAO.getFilmById(id);
         model.addAttribute("film", film);
         model.addAttribute("user", this.sessionObject.getUser());
         model.addAttribute("info", this.sessionObject.getInfo());
 
-        this.filmRepository.deleteFilm(id);
+        this.filmDAO.deleteFilm(id);
         return "redirect:/main";
     }
 }
