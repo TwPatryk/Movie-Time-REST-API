@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
-import pl.tworek.patryk.movieTime.database.IFilmRepository;
 import pl.tworek.patryk.movieTime.services.IFilmService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
@@ -56,11 +55,8 @@ public class AdminController {
             this.sessionObject.setInfo("Film added successfully!");
         } else if (result == IFilmService.AddFilmResult.FILM_UPDATED) {
             this.sessionObject.setInfo("Film already exists - update successfull!");
-//        if (film.getTitle().equals("") || film.getProductionYear().equals("") || film.getDirector().equals("") ||
-//                film.getLength().equals("") || film.getGenre().equals("")) {
-//            this.sessionObject.setInfo("Please, fill the whole form");
-//            return "redirect:/addFilm";
         }
+
         return "redirect:/main";
     }
 

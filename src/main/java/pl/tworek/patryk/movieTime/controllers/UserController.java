@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pl.tworek.patryk.movieTime.model.User;
 import pl.tworek.patryk.movieTime.model.view.ChangePassData;
 import pl.tworek.patryk.movieTime.model.view.CreateNewUser;
-import pl.tworek.patryk.movieTime.database.IFilmRepository;
-import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
 import pl.tworek.patryk.movieTime.services.IUserService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 

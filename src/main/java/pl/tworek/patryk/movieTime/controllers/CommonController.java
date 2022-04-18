@@ -6,19 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
-import pl.tworek.patryk.movieTime.database.IFilmRepository;
-import pl.tworek.patryk.movieTime.database.impl.IUserRepositoryList;
 import pl.tworek.patryk.movieTime.services.IFilmService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
-import pl.tworek.patryk.movieTime.utils.FilterUtils;
 
 import javax.annotation.Resource;
 
 @Controller
 public class CommonController {
-
-    @Autowired
-    IFilmRepository filmRepository;
 
     @Resource
     SessionObject sessionObject;
@@ -63,7 +57,7 @@ public class CommonController {
     public String editBookPage( Model model,@PathVariable int id) {
 
 
-        model.addAttribute("film", filmRepository.getFilmById(id));
+        model.addAttribute("film", filmDAO.getFilmById(id));
         model.addAttribute("user", this.sessionObject.getUser());
         return "rateFilm";
     }
@@ -71,12 +65,8 @@ public class CommonController {
 
     @RequestMapping(value="/rateFilm/{id}", method = RequestMethod.POST)
     public String editBook(@ModelAttribute Film film, @PathVariable int id, @RequestParam double grade) {
-        //film.setId(id);
-        //this.filmRepository.updateFilm(film);
-        Film updatedFilm = this.filmRepository.getFilmById(film.getId());
 
-
-
+        Film updatedFilm = this.filmDAO.getFilmById(film.getId());
 
         updatedFilm.setRateSum(updatedFilm.getRateSum() + grade);
         updatedFilm.setVoteCount(updatedFilm.getVoteCount() + 1);
@@ -84,26 +74,11 @@ public class CommonController {
         double roundedNum = round(number, 1);
         updatedFilm.setRate(roundedNum);
 
-        System.out.println("updated rate sum" + updatedFilm.getRateSum());
-
-        this.filmRepository.updateFilm(updatedFilm);
-
-//        public Film rateAfilm(int grade) {
-//            List<Film> filmList = new ArrayList<>();
-//            double wynik = 0;
-//            for (Film filmFromDB : this.films) {
-//                filmFromDB.setRateSum(filmFromDB.getRateSum() +grade);
-//                filmFromDB.setVoteCount(filmFromDB.getVoteCount()+1);
-//                double number = (filmFromDB.getRateSum() / filmFromDB.getVoteCount());
-//                double roundedNum = round(number, 1);
-//                filmFromDB.setRate(roundedNum);
-//                return filmFromDB;
-//            }
-//            return null;
-//        }
+        this.filmDAO.updateFilm(updatedFilm);
 
         return "redirect:/main";
     }
+
     private static double round (double value, int precision) {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;

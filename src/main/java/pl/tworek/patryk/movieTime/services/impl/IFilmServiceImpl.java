@@ -78,4 +78,5 @@ public class IFilmServiceImpl implements IFilmService {
                         this.sessionObject.getFilter());
         }
     }
+
 }
