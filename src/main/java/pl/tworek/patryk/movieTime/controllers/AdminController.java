@@ -13,7 +13,6 @@ import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 @Controller
 public class AdminController {
@@ -87,7 +86,7 @@ public class AdminController {
         model.addAttribute("user", this.sessionObject.getUser());
         model.addAttribute("info", this.sessionObject.getInfo());
 
-        this.filmDAO.deleteFilm(id);
+        this.filmDAO.deleteFilm(film);
         return "redirect:/main";
     }
 }

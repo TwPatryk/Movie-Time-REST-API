@@ -1,12 +1,14 @@
 package pl.tworek.patryk.movieTime.dao.impl;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.tworek.patryk.movieTime.dao.IUserDAO;
 import pl.tworek.patryk.movieTime.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,58 +16,55 @@ import java.sql.SQLException;
 public class IUserDAOImpl implements IUserDAO {
 
     @Autowired
-    Connection connection;
+    SessionFactory sessionFactory;
 
     @Override
     public User getUserByLogin(String login) {
-        try {
-            String SQL = "SELECT * FROM tuser WHERE login=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, login);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
-                return this.mapResultSetToUser(resultSet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Session session = this.sessionFactory.openSession();
+        User user = null;
+        try {
+            Query<User> query = session.createQuery("FROM pl.tworek.patryk.movieTime.model.User WHERE login= :login");
+            query.setParameter("login", login);
+            user = query.getSingleResult();
+        } catch (Exception e) {
+        } finally {
+            session.close();
         }
-        return null;
+        return user;
     }
 
     @Override
-    public User updateUser(User user) {
-        try {
-            String SQL = "UPDATE tuser SET name=?, surname=?, login=?, password=?, role=? WHERE id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getSurname());
-            preparedStatement.setString(3, user.getLogin());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getRole().toString());
-            preparedStatement.setInt(6, user.getId());
+    public void updateUser(User user) {
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.update(user);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            session.close();
         }
-        return null;
     }
 
     @Override
     public void persistUser(User user) {
-        try {
-            String SQL = "INSERT INTO tuser (name, surname, login, password, role) VALUES (?, ?, ?, ? ,?)";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getSurname());
-            preparedStatement.setString(3, user.getLogin());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getRole().toString());
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.save(user);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            session.close();
         }
     }
 

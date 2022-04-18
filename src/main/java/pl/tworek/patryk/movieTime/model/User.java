@@ -1,11 +1,17 @@
 package pl.tworek.patryk.movieTime.model;
 
+import javax.persistence.*;
+
+@Entity(name = "tuser")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String surname;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public User() {

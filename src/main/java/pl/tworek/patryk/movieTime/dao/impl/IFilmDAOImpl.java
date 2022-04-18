@@ -1,156 +1,137 @@
 package pl.tworek.patryk.movieTime.dao.impl;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.tworek.patryk.movieTime.dao.IFilmDAO;
 import pl.tworek.patryk.movieTime.model.Film;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import javax.persistence.NoResultException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class IFilmDAOImpl implements IFilmDAO {
 
     @Autowired
-    Connection connection;
+    SessionFactory sessionFactory;
 
     @Override
     public Film getFilmByTitle(String title) {
+
+        Session session = null;
+        Film film = null;
+
+        session = this.sessionFactory.openSession();
+        Query<Film> query = session.createQuery("FROM pl.tworek.patryk.movieTime.model.Film WHERE title= :title");
+        query.setParameter("title", title);
         try {
-            String SQL = "SELECT * FROM tfilm WHERE title=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, title);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return this.mapResultSetToFilm(resultSet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            film = query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("Film not found !");
         }
-        return null;
+        session.close();
+
+        return film;
     }
 
     @Override
     public void updateFilm(Film film) {
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
         try {
-            String SQL = "UPDATE tfilm SET title=?, productionYear=?, director=?, length=?, genre=?, rate=?, rateSum=?, voteCount=?, category=?, filePath=? WHERE id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-
-
-            preparedStatement.setString(1, film.getTitle());
-            preparedStatement.setString(2, film.getProductionYear());
-            preparedStatement.setString(3, film.getDirector());
-            preparedStatement.setString(4, film.getLength());
-            preparedStatement.setString(5, film.getGenre());
-            preparedStatement.setDouble(6, film.getRate());
-            preparedStatement.setDouble(7, film.getRateSum());
-            preparedStatement.setInt(8, film.getVoteCount());
-            preparedStatement.setString(9, film.getCategory().toString());
-            preparedStatement.setString(10, film.getFilePath());
-            preparedStatement.setInt(11, film.getId());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            tx = session.beginTransaction();
+            session.update(film);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public void persistFilm(Film film) {
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+
         try {
-            String SQL = "INSERT INTO tfilm(title, productionYear, director, length, genre, rate, rateSum, voteCount, category, filePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, film.getTitle());
-            preparedStatement.setString(2, film.getProductionYear());
-            preparedStatement.setString(3, film.getDirector());
-            preparedStatement.setString(4, film.getLength());
-            preparedStatement.setString(5, film.getGenre());
-            preparedStatement.setDouble(6, film.getRate());
-            preparedStatement.setDouble(7, film.getRateSum());
-            preparedStatement.setInt(8, film.getVoteCount());
-            preparedStatement.setString(9, film.getCategory().toString());
-            preparedStatement.setString(10, film.getFilePath());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            tx = session.beginTransaction();
+            session.save(film);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            session.close();
         }
+
     }
 
     @Override
-    public void deleteFilm(int id) {
-        try {
-            String SQL = "DELETE FROM tfilm WHERE id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setInt(1, id);
+    public void deleteFilm(Film film) {
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(film);
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null)
+                tx.rollback();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public Film getFilmById(int id) {
+
+        Session session = this.sessionFactory.openSession();
+        Film film = null;
+
         try {
-            String SQL = "SELECT * FROM tfilm WHERE id=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.next()) {
-                return this.mapResultSetToFilm(resultSet);
-            } else {
-                return null;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            Query<Film> query = session.createQuery("FROM pl.tworek.patryk.movieTime.model.Film WHERE id= :id");
+            query.setParameter("id", id);
+            film = query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("Film not found !");
+        } finally {
+            session.close();
         }
-        return null;
+        return film;
     }
 
     @Override
     public List<Film> getFilmsByCategory(Film.Category category) {
-        List<Film> filmList = new ArrayList<>();
-        try {
-            String SQL = "SELECT * FROM tfilm WHERE category=?";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            preparedStatement.setString(1, category.toString());
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                filmList.add(this.mapResultSetToFilm(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = this.sessionFactory.openSession();
+
+        Query<Film> query = session.createQuery("FROM pl.tworek.patryk.movieTime.model.Film WHERE category  = :category");
+        query.setParameter("category", category);
+        List<Film> filmList = query.getResultList();
+        session.close();
+
         return filmList;
     }
 
     @Override
     public List<Film> getAllFilms() {
-        List<Film> filmList = new ArrayList<>();
-        try {
-            String SQL = "SELECT * FROM tfilm";
-            PreparedStatement preparedStatement = this.connection.prepareStatement(SQL);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
-                filmList.add(this.mapResultSetToFilm(resultSet));
-            }
+        Session session = this.sessionFactory.openSession();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Query<Film> query = session.createQuery("FROM pl.tworek.patryk.movieTime.model.Film");
+        List<Film> filmList = query.getResultList();
+
+        session.close();
+
         return filmList;
     }
 

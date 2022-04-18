@@ -1,6 +1,11 @@
 package pl.tworek.patryk.movieTime.model;
 
+import javax.persistence.*;
+
+@Entity(name = "tfilm")
 public class Film {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private String productionYear;
@@ -10,6 +15,7 @@ public class Film {
     private double rate;
     private double rateSum;
     private int voteCount;
+    @Enumerated(EnumType.STRING)
     private Category category;
     private String filePath;
 
