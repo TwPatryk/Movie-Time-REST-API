@@ -23,7 +23,7 @@ public class SessionObject {
     }
 
     public boolean isLogged() {
-        return !(this.user == null);
+        return this.user != null;
         }
 
     public String getInfo() {

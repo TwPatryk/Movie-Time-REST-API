@@ -13,7 +13,7 @@ public class FilterUtils {
         }
         List<Film> filmsByFilter = new ArrayList<>();;
         for (Film currentFilm : films) {
-            if (currentFilm.getTitle().toUpperCase().contains(filter.toUpperCase())) {
+            if (currentFilm.getTitle().toUpperCase().contains(filter.toUpperCase()) || currentFilm.getDirector().toUpperCase().contains(filter.toUpperCase())) {
                 filmsByFilter.add(currentFilm);
             }
         }

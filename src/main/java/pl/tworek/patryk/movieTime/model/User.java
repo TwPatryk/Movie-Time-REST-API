@@ -78,4 +78,19 @@ public class User {
         ADMIN,
         USER
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            User user = (User) obj;
+            if (this.id == user.id &&
+                    this.login.equals(user.login) &&
+                    this.name.equals(user.name) &&
+                    this.surname.equals(user.surname) &&
+                    this.role == user.role) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -128,4 +128,41 @@ public class Film {
         MOVIE,
         TVSHOW
     }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", productionYear='" + productionYear + '\'' +
+                ", director='" + director + '\'' +
+                ", length='" + length + '\'' +
+                ", genre='" + genre + '\'' +
+                ", rate=" + rate +
+                ", rateSum=" + rateSum +
+                ", voteCount=" + voteCount +
+                ", category=" + category +
+                ", filePath='" + filePath + '\'' +
+                '}';
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Film) {
+            Film film = (Film) obj;
+            if(this.id == film.getId() &&
+            this.title.equals(film.getTitle()) &&
+            this.productionYear.equals(film.getProductionYear()) &&
+            this.director.equals(film.getDirector()) &&
+            this.length.equals(film.getLength()) &&
+            this.genre.equals(film.getGenre()) &&
+            this.rate == film.getRate() &&
+            this.rateSum == film.getRateSum() &&
+            this.voteCount == film.getVoteCount() &&
+            this.category.equals(film.getCategory())  &&
+            this.filePath.equals(film.getFilePath())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

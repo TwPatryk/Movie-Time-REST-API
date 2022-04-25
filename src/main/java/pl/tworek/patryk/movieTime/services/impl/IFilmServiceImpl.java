@@ -63,6 +63,11 @@ public class IFilmServiceImpl implements IFilmService {
 
     @Override
     public List<Film> getFilmsByCategoryWithFilter(String category) {
+
+        if(category == null) {
+            category = "";
+        }
+
         switch(category) {
             case "movies":
                 return FilterUtils.filterOfFilms(this.filmDAO.getFilmsByCategory(Film.Category.MOVIE),
