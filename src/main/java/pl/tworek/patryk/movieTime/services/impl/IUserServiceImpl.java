@@ -10,6 +10,7 @@ import pl.tworek.patryk.movieTime.services.IUserService;
 import pl.tworek.patryk.movieTime.sessionObject.SessionObject;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class IUserServiceImpl implements IUserService {
@@ -70,5 +71,25 @@ public class IUserServiceImpl implements IUserService {
 
         this.userDAO.persistUser(user);
         return true;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return this.userDAO.getAllUsers();
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return this.userDAO.getUserById(id);
+    }
+
+    @Override
+    public void persistUser(User user) {
+        this.userDAO.persistUser(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        this.userDAO.updateUser(user);
     }
 }

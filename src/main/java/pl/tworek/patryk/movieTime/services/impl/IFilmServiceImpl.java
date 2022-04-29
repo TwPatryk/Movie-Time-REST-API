@@ -10,6 +10,7 @@ import pl.tworek.patryk.movieTime.utils.FilterUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -79,6 +80,23 @@ public class IFilmServiceImpl implements IFilmService {
                 return FilterUtils.filterOfFilms(this.filmDAO.getAllFilms(),
                         this.sessionObject.getFilter());
         }
+    }
+
+    @Override
+    public List<Film> getAllFilms() {
+        List<Film> films = new ArrayList<>();
+        films = this.filmDAO.getAllFilms();
+        return films;
+    }
+
+    @Override
+    public void updateFilm(Film film) {
+        this.filmDAO.updateFilm(film);
+    }
+
+    @Override
+    public void deleteFilm(Film film) {
+        this.filmDAO.deleteFilm(film);
     }
 
 }

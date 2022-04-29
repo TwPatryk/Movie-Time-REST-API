@@ -10,6 +10,9 @@ public interface IFilmService {
     String viewPathModifier(String filePath);
     Film getFilmById(int id);
     List<Film> getFilmsByCategoryWithFilter(String category);
+    List<Film> getAllFilms();
+    void updateFilm(Film film);
+    void deleteFilm(Film film);
 
     enum AddFilmResult {
         FILM_ADDED,
